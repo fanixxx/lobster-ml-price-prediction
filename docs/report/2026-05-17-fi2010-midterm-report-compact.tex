@@ -1,0 +1,85 @@
+
+\documentclass[11pt]{ctexart}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{longtable}
+
+\title{机器学习课程大作业中期汇报\\
+基于 FI-2010 订单簿数据的短期价格方向预测}
+\author{黄秋实 \and 余宏鹏 \and 杨邦粲 \and 陈家乐}
+\date{2026年5月17日}
+
+\begin{document}
+\maketitle
+
+\section*{1. 项目当前状态}
+本项目最初计划基于 LOBSTER 数据进行短期价格方向预测，但由于公开可直接获取的数据规模较小，难以支撑系统实验，因此中期阶段转向使用 FI-2010 benchmark 数据集。当前项目已经完成从 FI-2010 原始矩阵读取、伪订单簿转换、特征构造、标签生成、模型训练到结果导出的完整流程，并能够在官方 train/test split 上稳定运行预测实验。
+
+\section*{2. 当前进展}
+目前已经完成以下工作：
+\begin{itemize}[leftmargin=*]
+    \item 完成 FI-2010 数据适配，将前 40 维基础盘口特征转换为可复用现有代码的伪订单簿格式；
+    \item 完成特征工程模块，当前主特征方案为 \texttt{depth\_plus\_window}；
+    \item 完成标签生成模块，当前主标签方案为 \texttt{adaptive}；
+    \item 完成 \texttt{logistic\_regression}、\texttt{random\_forest} 和 \texttt{xgboost} 三类模型训练；
+    \item 完成 benchmark 风格 train/test workflow，支持 FI-2010 官方 \texttt{CF\_1 \textasciitilde CF\_9} split；
+    \item 完成项目结构重构，当前仓库已以 FI-2010 为主线。
+\end{itemize}
+
+\section*{3. 当前困难与 roadblocks}
+目前的主要问题包括：
+\begin{itemize}[leftmargin=*]
+    \item 原始选题依赖 LOBSTER，但公开数据有限，因此需要在不推翻既有结构的前提下切换到 FI-2010；两者数据格式差异较大，需要额外设计适配层；
+    \item 当前实验结果说明模型已学习到一定方向信息，但整体预测性能仍然一般，后续仍需进一步优化模型与特征。
+\end{itemize}
+
+\section*{4. 初步实验结果}
+目前已完成一轮正式预测实验，配置为：
+\begin{itemize}[leftmargin=*]
+    \item 数据：FI-2010 \texttt{NoAuction/DecPre}
+    \item 模型：\texttt{xgboost}
+    \item 标签：\texttt{adaptive}
+    \item 特征：\texttt{depth\_plus\_window}
+    \item 预测窗口：\texttt{horizon = 10}
+    \item 划分方式：官方 \texttt{CF\_1 \textasciitilde CF\_9}
+\end{itemize}
+
+各 split 的结果如下：
+
+\begin{longtable}{ccccc}
+\caption{第一版 FI-2010 预测结果}
+\label{tab:compact-first-round}\\
+\toprule
+CF Split & Accuracy & Macro F1 & Train Size & Test Size \\
+\midrule
+\endfirsthead
+\toprule
+CF Split & Accuracy & Macro F1 & Train Size & Test Size \\
+\midrule
+\endhead
+1 & 0.5113 & 0.4844 & 39493 & 38378 \\
+2 & 0.4880 & 0.4703 & 77890 & 28516 \\
+3 & 0.5001 & 0.4816 & 106425 & 37004 \\
+4 & 0.5217 & 0.4826 & 143448 & 34766 \\
+5 & 0.5228 & 0.5177 & 178233 & 39133 \\
+6 & 0.5089 & 0.4912 & 217385 & 37327 \\
+7 & 0.5140 & 0.5030 & 254731 & 55459 \\
+8 & 0.5075 & 0.4980 & 310209 & 52153 \\
+9 & 0.4757 & 0.4726 & 362381 & 31918 \\
+\bottomrule
+\end{longtable}
+
+整体统计结果为：平均 Accuracy 为 \texttt{0.5055}，平均 Macro F1 为 \texttt{0.4890}，其中最优 split 为 \texttt{CF\_5}，对应 Accuracy \texttt{0.5228}、Macro F1 \texttt{0.5177}。从结果看，当前模型在不同 split 上表现较稳定，但整体效果仍然不算理想，只能说明项目已经建立起可运行、可复现的预测主线，距离最终理想结果还有提升空间。
+
+\section*{5. 后续计划}
+下一阶段将继续围绕预测任务推进：
+\begin{itemize}[leftmargin=*]
+    \item 完成完整 benchmark 配置的训练结果汇总，并进行更系统的 split 级别分析；
+    \item 以当前 \texttt{xgboost} 结果作为基准模型，继续尝试更多模型或改进模型结构；
+    \item 补充特征重要性分析，解释订单簿深度与窗口特征的作用；
+    \item 继续优化标签设计、预测窗口和参数设置，争取提升 Accuracy 与 Macro F1；
+    \item 将结果整理为最终报告所需的图表与表格。
+\end{itemize}
+
+\end{document}

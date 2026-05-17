@@ -1,0 +1,50 @@
+data:
+  benchmark_root: data/BenchmarkDatasets/NoAuction/3.NoAuction_DecPre
+  snapshot_frequency: 1s
+  trading_start_seconds: 0.0
+  trading_end_seconds: 1000000000000.0
+  cost_bps: 1.0
+
+features:
+  levels: 10
+  rolling_windows:
+    - 5
+    - 10
+  depth_levels:
+    - 5
+    - 10
+  aggregate_windows:
+    - 5
+    - 10
+  feature_variants:
+    - depth_plus_window
+
+labels:
+  modes:
+    - adaptive
+  horizons:
+    - 10
+    - 20
+    - 50
+  fixed_threshold: 0.0005
+  volatility_window: 20
+  volatility_scale: 0.5
+  quantile_lower: 0.2
+  quantile_upper: 0.8
+
+models:
+  candidates:
+    - xgboost
+    - random_forest
+
+benchmark:
+  cf_splits:
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    - 8
+    - 9

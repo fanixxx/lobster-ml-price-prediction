@@ -1,0 +1,23 @@
+data:
+  snapshot_frequency: "1s"
+  trading_start_seconds: 0.0
+  trading_end_seconds: 1000000000000.0
+
+features:
+  levels: 10
+  rolling_windows: [5, 10]
+  depth_levels: [5, 10]
+  aggregate_windows: [5]
+  feature_variants: ["baseline", "depth_plus_window"]
+
+labels:
+  modes: ["quantile"]
+  horizons: [20]
+  fixed_threshold: 0.0005
+  volatility_window: 10
+  volatility_scale: 0.5
+  quantile_lower: 0.2
+  quantile_upper: 0.8
+
+models:
+  candidates: ["logistic_regression"]

@@ -1,0 +1,1 @@
+Mid-term Report (1-2 pages): Describe the current status of your project. This report  should summarize your progress, identify any challenges or "roadblocks" encountered,  present preliminary results (if available), and define the next steps for completion. 

@@ -1,0 +1,41 @@
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Python cache and test artifacts
+__pycache__/
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+.coverage.*
+
+# Local environment and tool caches
+.mplconfig/
+.ipynb_checkpoints/
+.venv/
+venv/
+env/
+
+# Local datasets and processed data
+data/raw/
+data/raw_FI_2010/
+data/BenchmarkDatasets/
+data/processed/
+
+# Generated experiment outputs
+results/
+
+# Local report build artifacts
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+
+# Optional local presentation drafts
+docs/presentation/
